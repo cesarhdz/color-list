@@ -32,7 +32,7 @@ class Shortcode{
 		return implode('', $result);
 	}
 
-	static $template = '<{tag} {attr}="{attr_value}">{value}</{tag}>';
+	static $template = '<{tag} {attr}="{attr_value}" title="{value}">{value}</{tag}>';
 	static $templatePatterns = array('{tag}', '{attr}', '{value}', '{attr_value}');
 
 	function itemToTemplate($item){
