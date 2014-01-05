@@ -7,6 +7,7 @@ class Shortcode{
 
 	const DEFAULT_TAG = 'span';
 	const DEFAULT_ATTR = 'data-color';
+	const DEFAULT_DELIMITER = ',';
 
 	function __construct($content){
 		$this->content = $content;
@@ -14,14 +15,14 @@ class Shortcode{
 
 	function parse(){
 		// Como devulve una lista, la estructura será ul > li + li ....
-		$items = explode("\n", $this->getParseableContent());
+		$items = explode(self::DEFAULT_DELIMITER, $this->getContent());
 
 		return $this->parseItems($items);
 	}
 
 
-	function getParseableContent(){
-		return str_replace(array("\r\n", "\r", "\n"), "\n", $this->content);
+	function getContent(){
+		return str_replace(array("\r\n", "\r", "\n"), "", $this->content);
 	}
 
 
@@ -36,19 +37,22 @@ class Shortcode{
 
 	function itemToTemplate($item){
 
+		// Eliminamos espacios en blanco en los elementos
+		$item = trim($item);
+
 		$replacement = array(
 			self::DEFAULT_TAG,
 			self::DEFAULT_ATTR,
 			$item,
-			self::getRawData($item)
+			self::sanitizeItem($item)
 		);
 
 		return str_replace(self::$templatePatterns, $replacement, self::$template);
 	}
 
 
-	static function getRawData($item){
-		$item = trim(strtolower($item));
+	static function sanitizeItem($item){
+		$item = strtolower($item);
 
 		return $item;
 	}
