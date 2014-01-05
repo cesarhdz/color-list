@@ -9,8 +9,8 @@
             "email": "mrshortcuts@gmail.com"
         }
     ],
-    "require": {
-
+    "require-dev": {
+        "ixa/wordpress-core" : "~3.8"
     },
     "autoload":{
         "psr-0": {"CesarHdz\\": "src/"}

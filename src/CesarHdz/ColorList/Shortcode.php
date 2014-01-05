@@ -52,7 +52,8 @@ class Shortcode{
 
 
 	static function sanitizeItem($item){
-		$item = strtolower($item);
+		//@TODO Hacerlo a través de otra dependencia
+		$item = sanitize_title_with_dashes($item);
 
 		return $item;
 	}
