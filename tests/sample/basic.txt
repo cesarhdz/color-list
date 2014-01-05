@@ -1,2 +1,2 @@
-red
-blue
+Red
+Blue

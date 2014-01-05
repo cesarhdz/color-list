@@ -1,0 +1,1 @@
+<span data-color="red">Red</span><span data-color="blue">Blue</span>
