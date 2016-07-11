@@ -14,14 +14,15 @@ class ShortcodeTest extends \PHPUnit_Framework_TestCase
     public function testLaListaTieneUnaEstructuraAdecuada(){
     	$sample = load_sample('basic');
     	$expected = load_sample('basic-expected');
-    	$result = $this->parse($sample);
+    	
+    	$result = $this->parse($sample, []);
 
     	$this->assertEquals($expected, $result);
     }
 
 
-    function parse($content){
-    	$shorcode = new Shortcode($content);
+    function parse($content, $atts){
+    	$shorcode = new Shortcode($content, $atts);
     	return $shorcode->parse();
     }
 }

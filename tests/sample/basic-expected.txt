@@ -1,1 +1,1 @@
-<span data-color="red" title="Red">Red</span><span data-color="blue" title="Blue">Blue</span>
+<span class="" data-color="red" title="Red"><span>Red</span></span><span class="" data-color="blue" title="Blue"><span>Blue</span></span>
