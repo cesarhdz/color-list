@@ -2,15 +2,15 @@
 
 class Shortcode{
 
-
 	protected $content;
 
 	const DEFAULT_TAG = 'span';
 	const DEFAULT_ATTR = 'data-color';
 	const DEFAULT_DELIMITER = ',';
 
-	function __construct($content){
+	function __construct($content, $atts){
 		$this->content = $content;
+		$this->atts = $atts ? $atts : array();
 	}
 
 	function parse(){
@@ -25,18 +25,23 @@ class Shortcode{
 		return str_replace(array("\r\n", "\r", "\n"), "", $this->content);
 	}
 
-
 	function parseItems(array $items){
 		$result = array_map(array($this, 'itemToTemplate'), $items);
 
 		return implode('', $result);
 	}
 
-	static $template = '<{tag} {attr}="{attr_value}" title="{value}">{value}</{tag}>';
-	static $templatePatterns = array('{tag}', '{attr}', '{value}', '{attr_value}');
+	static $template = '<{tag} class="{attr_class}" {attr}="{attr_value}" title="{value}"><span>{value}</span></{tag}>';
+	
+	static $templatePatterns = array(
+		'{tag}', 
+		'{attr}', 
+		'{value}', 
+		'{attr_value}',
+		'{attr_class}'
+	);
 
 	function itemToTemplate($item){
-
 		// Eliminamos espacios en blanco en los elementos
 		$item = trim($item);
 
@@ -44,12 +49,22 @@ class Shortcode{
 			self::DEFAULT_TAG,
 			self::DEFAULT_ATTR,
 			$item,
-			self::sanitizeItem($item)
+			$this->getPrefix() . self::sanitizeItem($item),
+			$this->getClassName()
 		);
 
 		return str_replace(self::$templatePatterns, $replacement, self::$template);
 	}
 
+	function getPrefix(){
+		$key = 'prefix';
+		return array_key_exists($key, $this->atts) ? $this->atts[$key] . '-' : '';
+	}
+
+	function getClassName(){
+		$key = 'class';
+		return array_key_exists($key, $this->atts) ? $this->atts[$key] : '';
+	}
 
 	static function sanitizeItem($item){
 		//@TODO Hacerlo a través de otra dependencia
@@ -58,7 +73,6 @@ class Shortcode{
 		return $item;
 	}
 
-
 	/**
 	 * Run
 	 * @param  array $atts    Atributos agregados al shorcode
@@ -66,7 +80,7 @@ class Shortcode{
 	 * @return mixed          Usualmente regresa un String;
 	 */
 	static function run($atts, $content){
-		$shortcode = new Shortcode($content);
+		$shortcode = new Shortcode($content, $atts);
 
 		return $shortcode->parse();
 	}
